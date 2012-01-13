@@ -1,0 +1,29 @@
+{
+  "name": "solid",
+  "version": "0.0.1",
+  "main": "./lib/solid",
+  "homepage" : "https://github.com/sarenji/solid",
+  "description": "Make small, solid sites.",
+  "dependencies": {},
+  "keywords": [
+    "framework",
+    "coffeescript"
+  ],
+  "bugs" : "http://github.com/sarenji/solid/issues",
+  "repository" : {
+    "type" : "git",
+    "url" : "git://github.com/sarenji/solid.git"
+  },
+  "devDependencies": {
+    "coffee-script": "1.1.x",
+    "should": "0.3.x",
+    "mocha": "0.3.x"
+  },
+  "scripts": {
+    "test": "mocha",
+    "prepublish": "coffee -o lib -c src/*.coffee"
+  },
+  "contributors": [
+    "Abi Raja <abii@stanford.edu>"
+  ]
+}
