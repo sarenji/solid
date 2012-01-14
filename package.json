@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "coffee-script": "1.1.x",
+    "thermos" : "*",
     "should": "0.3.x",
     "mocha": "0.3.x"
   },
