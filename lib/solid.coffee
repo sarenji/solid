@@ -1,5 +1,3 @@
-typeOf = (obj) ->
-  Object.prototype.toString.call(obj).slice 8, -1
 
 routes =
   cache : {}
@@ -15,16 +13,16 @@ routes =
 
   build_recurse : (prefix, paths...) ->
     for path in paths
-      switch typeOf(path)
-        when "Object" # Hash
+      switch typeof(path)
+        when "object" # Hash
           for pathName, value of path
-            type = typeOf(value)
-            if type is "Object" # Hash again
+            type = typeof(value)
+            if type is "object" # Hash again
               routes.build_recurse "#{prefix}/#{pathName}/", value
             else
-              value = routes.normalizePath value  if type is "String"
+              value = routes.normalizePath value  if type is "string"
               routes.bind prefix + pathName, value
-        when "String"
+        when "string"
           path = routes.normalizePath prefix + path
           routes.bind path, path
         else
