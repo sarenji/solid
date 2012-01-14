@@ -18,18 +18,27 @@ routes =
       switch typeOf(path)
         when "Object" # Hash
           for pathName, value of path
-            if typeOf(value) is "Object" # Hash again
-              routes.build_recurse prefix + pathName, value
+            type = typeOf(value)
+            if type is "Object" # Hash again
+              routes.build_recurse "#{prefix}/#{pathName}/", value
             else
+              value = routes.normalizePath value  if type is "String"
               routes.bind prefix + pathName, value
         when "String"
-          routes.bind prefix + path, path
+          path = routes.normalizePath prefix + path
+          routes.bind path, path
         else
           throw new Error "I don't understand this path: #{path}"
     routes.cache
 
   bind : (path, value) ->
+    path = routes.normalizePath path
     routes.cache[path] = value
+
+  normalizePath : (path) ->
+    path = "/#{path}"
+    path = path.replace(/\/{2,}/g, "/")
+    path = path.replace(/(?!^)\/+$/g, "")
 
   map : (path) ->
     routes.cache[path]
