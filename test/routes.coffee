@@ -25,6 +25,15 @@ describe "passing one argument of", ->
         "index.html" : "other.html"
         "hello.html" : world
 
+    it "should support nested routes", ->
+      routes = solid.routes.build
+        "/site" :
+          "" : "index.html"
+          "/about" : "about.html"
+      routes.should.eql
+        "/site" : "index.html"
+        "/site/about" : "about.html"
+
 describe "passing multiple arguments of", ->
   describe "strings", ->
     it "should serve all of them", ->

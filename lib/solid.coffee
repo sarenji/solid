@@ -10,16 +10,20 @@ routes =
 
   # Returns a hash of paths mapped to paths or functions.
   build : (paths...) ->
+    prefix = ""
+    routes.build_recurse(prefix, paths...)
+
+  build_recurse : (prefix, paths...) ->
     for path in paths
       switch typeOf(path)
         when "Object" # Hash
           for pathName, value of path
             if typeOf(value) is "Object" # Hash again
-              routes.build value, routes
+              routes.build_recurse prefix + pathName, value
             else
-              routes.bind pathName, value
+              routes.bind prefix + pathName, value
         when "String"
-          routes.bind path, path
+          routes.bind prefix + path, path
         else
           throw new Error "I don't understand this path: #{path}"
     routes.cache
