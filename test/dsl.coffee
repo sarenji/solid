@@ -44,6 +44,12 @@ describe "the dsl", ->
           @span "you so fancy"
       func.call(null).should.equal "<p><span>you so fancy</span></p>"
 
+    it "can get passed a request object", ->
+      func = dsl.render (req) ->
+        @p -> req.params.test
+      func.call(null, params : { test: "hi" })
+      .should.equal "<p>hi</p>"
+
     it "should take options to delegate to thermos", ->
       helpers =
         test : -> @p arguments...

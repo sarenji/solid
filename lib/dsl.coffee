@@ -21,4 +21,6 @@ dsl.render = (opts, func) ->
   if arguments.length is 1
     func = opts
     opts = {}
-  -> require('thermos').render(opts, func)
+  (req, res) ->
+    opts.locals = req or {}
+    require('thermos').render(opts, func)
