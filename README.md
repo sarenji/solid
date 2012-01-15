@@ -34,3 +34,4 @@ This will run solid's `mocha` tests.
 ## TODO
 
 * Add HTTP tests
+* Asynchronous request handlers (reading file, etc.)

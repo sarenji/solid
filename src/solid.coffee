@@ -2,6 +2,7 @@ express = require 'express'
 dsl     = require './dsl'
 
 port = process.env.PORT or 8080
+
 solid = module.exports = (func) ->
   paths = func.call(dsl)
   routes.build paths
@@ -14,15 +15,15 @@ createServer = ->
 
   # app.static "#{__dirname}/public", maxAge : 0
 
-  # map routes
+  # Map routes
   for path, action of routes.cache
     method = action.method or 'get'
     app[method] path, (req, res, next) ->
       content = routes.map req.route.path
-      while typeof(content) is "function"
+      if typeof(content) is "function"
         content = content.call dsl, req, res
       console.log "CONTENT: #{content}"
-      if not content then return
+      if not content then return #TODO: Do something about this?
       res.writeHead 200, 'Content-Type' : 'text/html'
       res.end content, 'utf-8'
 
@@ -65,8 +66,8 @@ routes =
 
   normalizePath : (path) ->
     path = "/#{path}"
-    path = path.replace(/\/{2,}/g, "/")
-    path = path.replace(/(?!^)\/+$/g, "")
+    path = path.replace(/\/{2,}/g, "/") # Repeated forward slashes ('////') translate to one slash ('/')
+    path = path.replace(/(?!^)\/+$/g, "") # 
 
   map : (path) ->
     routes.cache[path]
