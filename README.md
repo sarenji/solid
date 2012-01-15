@@ -22,3 +22,7 @@ A bit more contrived example can be found [here](https://github.com/sarenji/soli
 ## Contributors
 
 [Abi Raja](https://github.com/abi) for the idea and contributions.
+
+## TODO
+
+* Add HTTP tests
