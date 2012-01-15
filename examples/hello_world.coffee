@@ -1,4 +1,4 @@
-require("../lib/solid") ->
+require("../src/solid") ->
   "/" : -> "<b>hello world!</b>"
   "/user" :
     "/:id" :

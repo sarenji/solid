@@ -1,4 +1,4 @@
-solid = require '../lib/solid'
+solid = require '../src/solid'
 should = require 'should'
 
 beforeEach ->
