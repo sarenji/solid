@@ -1,3 +1,33 @@
+express = require 'express'
+dsl     = require './dsl'
+
+port = process.env.PORT or 8080
+solid = module.exports = (func) ->
+  paths = func.call(dsl)
+  routes.build paths
+  server = createServer()
+  server.listen port
+  console.log "Solidified port #{port}"
+
+createServer = ->
+  app = express.createServer()
+
+  # app.static "#{__dirname}/public", maxAge : 0
+
+  # map routes
+  for path, action of routes.cache
+    method = action.method or 'get'
+    app[method] path, (req, res, next) ->
+      content = routes.map req.route.path
+      while typeof(content) is "function"
+        content = content.call dsl, req, res
+      console.log "CONTENT: #{content}"
+      if not content then return
+      res.writeHead 200, 'Content-Type' : 'text/html'
+      res.end content, 'utf-8'
+
+  # return created server
+  app
 
 routes =
   cache : {}
@@ -41,7 +71,9 @@ routes =
   map : (path) ->
     routes.cache[path]
 
-@routes =
+solid.routes =
   clean : routes.clean
   build : routes.build
   map   : routes.map
+
+solid.createServer = createServer

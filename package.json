@@ -4,7 +4,9 @@
   "main": "./lib/solid",
   "homepage" : "https://github.com/sarenji/solid",
   "description": "Make small, solid sites.",
-  "dependencies": {},
+  "dependencies": {
+    "express" : "2.x"
+  },
   "keywords": [
     "framework",
     "coffeescript"
