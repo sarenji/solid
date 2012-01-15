@@ -7,7 +7,8 @@ beforeEach ->
 describe "passing one argument of", ->
   describe "a number", ->
     it "should throw an exception", ->
-      -> solid.routes.build(1).should.throw()
+      -> solid.routes.build(1)
+      .should.throw()
 
   describe "a string", ->
     it "should serve the file denoted by that string", ->
