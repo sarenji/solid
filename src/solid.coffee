@@ -11,12 +11,13 @@ port = process.env.PORT or DEFAULT_PORT
 solid = module.exports = (options, func) ->
   if not func
     func = options
-    options = port: port
+    options = null
+  options.port ?= port
 
   paths = func.call(dsl)
   routes.build paths
   server = createServer options
-  server.listen options.port
+  server.listen options.port, options.host, options.callback
   console.log "Solidified port #{options.port}"
   server
 

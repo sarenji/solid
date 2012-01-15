@@ -55,15 +55,15 @@ describe "server", ->
 
   describe "redirects", ->
     it "should redirect and return a 302", (done) ->
-      server = solid ->
+      callback = ->
+        get "/home", (res, data) ->
+          res.statusCode.should.equal 302
+          res.headers.location.should.equal "http://#{HOST}:#{PORT}/"
+          server.close()
+          done()
+      server = solid callback: callback, ->
                 "/"          : -> "home"
                 "/home"      : "/"
-
-      get "/home", (res, data) ->
-        res.statusCode.should.equal 302
-        res.headers.location.should.equal "http://#{HOST}:#{PORT}/"
-        server.close()
-        done()
 
   describe "static files", ->
     it "should serve all files in the static option as static files", (done) ->
@@ -72,10 +72,12 @@ describe "server", ->
   describe "configuration", ->
     it "can take a port different from the default one", (done) ->
       port = 65432
-      server = solid {port: port}, ->
+      callback = ->
+        get "/", port: port, (res, data) ->
+          res.statusCode.should.equal 200
+          data.should.equal "home"
+          server.close()
+          done()
+
+      server = solid port: port, callback: callback, ->
                   "/" : -> "home"
-      get "/", port: port, (res, data) ->
-        res.statusCode.should.equal 200
-        data.should.equal "home"
-        server.close()
-        done()
