@@ -8,17 +8,25 @@ should = require 'should'
 
 PORT = solid.DEFAULT_PORT
 HOST = "127.0.0.1"
-        
-# HTTP client testing helpers
-# TODO: This doesn't handle errors all that well
 
-get = (path, cb, port=PORT) ->
+# HTTP client testing helpers
+
+get = (path, options, callback) ->
+  if not callback
+    callback = options
+    options  = null
+  options ?= { port : PORT }
+
   data = ""
-  console.log "About to do a GET #{HOST}:#{port}#{path}"
-  http.get {host: HOST, port:port, path:path}, (res) ->
+  port = options.port
+  console.log "About to do a GET on #{HOST}:#{port}#{path}"
+  request = http.get host: HOST, port: port, path: path, (res) ->
     res.on 'data', (chunk) -> data += chunk
-    res.on 'end', -> cb res, data
-  
+    res.on 'end', -> callback res, data
+  request.on 'error', (error) ->
+    console.error "Error in GET request:"
+    console.error error.stack
+
 # Tests
 # =====
 
@@ -26,49 +34,48 @@ describe "server", ->
   # describe "basic", ->
   #   it "should return some HTML with a 200 status code", (done) ->
   #     homeHTML = "<b>hello world!</b>"
-  #     
+  #
   #     server = solid ->
   #               "/"          : -> homeHTML
   #               "jquery"     : @jquery
-  #     
+  #
   #     console.log "Started server"
-  #     
+  #
   #     get "/", (res, data) ->
   #       console.log "Got some data #{data}"
   #       res.statusCode.should.equal 200
   #       data.should.equal homeHTML
-  #       
+  #
   #       get "/jquery", (res, data) ->
   #         res.headers['content-type'].should.equal 'text/javascript'
   #         res.statusCode.should.equal 200
   #         data.should.equal fs.readFileSync './external-libs/jquery.min.js', 'utf8'
   #         server.close()
   #         done()
-          
+
   describe "redirects", ->
-    it "should redirect and return a 302", (done) ->    
+    it "should redirect and return a 302", (done) ->
       server = solid ->
                 "/"          : -> "home"
                 "/home"      : "/"
-      
+
       get "/home", (res, data) ->
         res.statusCode.should.equal 302
         res.headers.location.should.equal "http://#{HOST}:#{PORT}/"
         server.close()
         done()
-  
+
   describe "static files", ->
     it "should serve all files in the static option as static files", (done) ->
       done() # TODO
-  
-  describe "server configuration", ->
+
+  describe "configuration", ->
     it "should start a server on a port other than the specified port rather than the default one", (done) ->
       port = 65432
       server = solid {port: port}, ->
                   "/" : -> "home"
-      get "/", ((res, data) ->
+      get "/", port: port, (res, data) ->
           res.statusCode.should.equal 200
           data.should.equal "home"
           server.close()
-          done()),
-        port
+          done()
