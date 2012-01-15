@@ -75,7 +75,7 @@ describe "server", ->
       server = solid {port: port}, ->
                   "/" : -> "home"
       get "/", port: port, (res, data) ->
-          res.statusCode.should.equal 200
-          data.should.equal "home"
-          server.close()
-          done()
+        res.statusCode.should.equal 200
+        data.should.equal "home"
+        server.close()
+        done()
