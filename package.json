@@ -6,7 +6,7 @@
   "description": "Shape super-small, simple, solid sites",
   "dependencies": {
     "express" : "2.x",
-    "thermos" : "*",
+    "thermos" : "*"
   },
   "keywords": [
     "framework",
