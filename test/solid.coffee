@@ -70,7 +70,7 @@ describe "server", ->
       done() # TODO
 
   describe "configuration", ->
-    it "should start a server on a port other than the specified port rather than the default one", (done) ->
+    it "can take a port different from the default one", (done) ->
       port = 65432
       server = solid {port: port}, ->
                   "/" : -> "home"
