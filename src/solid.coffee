@@ -97,8 +97,10 @@ routes =
 
   normalizePath : (path) ->
     path = "/#{path}"
-    path = path.replace(/\/{2,}/g, "/") # Repeated forward slashes ('////') translate to one slash ('/')
-    path = path.replace(/(?!^)\/+$/g, "") #
+    # Repeated forward slashes ('////') translate to one slash ('/')
+    path = path.replace(/\/{2,}/g, "/")
+    # Ending slashes are removed entirely. The beginning slash is preserved.
+    path = path.replace(/(?!^)\/+$/g, "")
 
   map : (path) ->
     routes.cache[path]
