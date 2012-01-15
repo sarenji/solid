@@ -8,9 +8,7 @@ shape super-small, simple, solid sites.
 $ npm install solid
 ```
 
-## Usage
-
-Hello world example:
+## Hello world example:
 
 ```coffeescript
 require('solid') ->
