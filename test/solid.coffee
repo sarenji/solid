@@ -7,7 +7,7 @@ should = require 'should'
 # Configuration
 
 PORT = solid.DEFAULT_PORT
-HOST = "localhost"
+HOST = "127.0.0.1"
         
 # HTTP client testing helpers
 # TODO: This doesn't handle errors all that well
