@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "main": "./lib/solid",
   "homepage" : "https://github.com/sarenji/solid",
-  "description": "Shape super-small, simple, solid sites",
+  "description": "Make small, simple sites",
   "dependencies": {
     "express" : "2.x",
     "thermos" : "*"
