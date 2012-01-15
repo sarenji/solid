@@ -1,6 +1,4 @@
-# solid
-
-[![Build Status](https://secure.travis-ci.org/sarenji/solid.png)](http://travis-ci.org/sarenji/solid)
+# solid [![Build Status](https://secure.travis-ci.org/sarenji/solid.png?branch=master)](http://travis-ci.org/sarenji/solid)
 
 make small, simple sites.
 
