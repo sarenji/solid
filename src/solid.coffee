@@ -14,8 +14,7 @@ solid = module.exports = (options, func) ->
   if not func
     func = options
     options = port: port
-  console.log options
-  
+    
   paths = func.call(dsl)
   routes.build paths
   server = createServer options
@@ -29,6 +28,7 @@ createServer = (options) ->
   if 'cwd' of options
     staticDir = "#{options.cwd}/static"
     console.log "Serving static files from #{staticDir}"
+    # TODO: In prod, it's bad to have a maxAge of zero
     app.use '/static', express.static(staticDir, maxAge : 0)
 
   # Map routes

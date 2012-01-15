@@ -53,6 +53,10 @@ describe "server working", ->
         server.close()
         done()
   
+  describe "static files", ->
+    it "should serve all files in the static option as static files", (done) ->
+      done() # TODO
+  
   describe "server configuration", ->
     it "should start a server on a port other than the specified port rather than the default one", (done) ->
       port = 65432
