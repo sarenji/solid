@@ -35,5 +35,6 @@ This will run solid's `mocha` tests.
 
 ## TODO
 
-* Add HTTP tests
 * Asynchronous request handlers (reading file, etc.)
+* Logging with noise levels (should be low-priority, basic method/path console logging already exists)
+* Override the HTTP response header X-Powered-By to Solid from Express :)

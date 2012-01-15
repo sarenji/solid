@@ -1,14 +1,18 @@
-express = require 'express'
 dsl     = require './dsl'
+express = require 'express'
+_       = require 'underscore'
+_.mixin require('underscore.string')
 
 port = process.env.PORT or 8080
 
+# Returns the Express server backing Solid
 solid = module.exports = (func) ->
   paths = func.call(dsl)
   routes.build paths
   server = createServer()
   server.listen port
   console.log "Solidified port #{port}"
+  server
 
 createServer = ->
   app = express.createServer()
@@ -19,18 +23,25 @@ createServer = ->
   for path, action of routes.cache
     method = action.method or 'get'
     app[method] path, (req, res, next) ->
-      content = routes.map req.route.path
-      if typeof(content) is "function"
-        content = content.call dsl, req, res
-        
-      console.log "CONTENT: #{content}"
       
+      # TODO: Also, print the response statusCode (with colors; use termcolor)
+      console.log "[#{req.method}] #{req.path}"
+      
+      content = routes.map req.route.path
+      
+      # If `content` is a function call it with the right scope (the `dsl` object) 
+      if typeof content is "function"
+        content = content.call dsl, req, res
+      # If `content` is a string and looks like an URL, then we redirect to that URL
+      else if typeof content is "string" and _(content).startsWith '/'
+        res.redirect content
+        return
+        
       if not content then return #TODO: Do something better than just return? Not sure what Express does with this
       
       if typeof content is "object"
         content.headers ?= {}
         if "type" of content then content.headers['Content-Type'] = content.type
-        console.log content.headers
         res.writeHead (content.statusCode or 200), content.headers
         res.end content.body, 'utf-8'
       else

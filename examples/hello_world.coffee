@@ -2,6 +2,7 @@ solid = require("../src/solid")
 
 solid ->
   "/"          : -> "<b>hello world!</b>"
+  "/home"      : "/"     # URL rewriting/redirects
   "/jquery.js" : @jquery # Remember that you still have to include a <script src="/jquery.js"></script> in your HTML
   "/user"      :
                  "/:id":

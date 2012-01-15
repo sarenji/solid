@@ -7,6 +7,7 @@ should = require 'should'
 # Configuration
 
 PORT = 8080
+HOST = "localhost"
         
 # HTTP client testing helpers
 # TODO: This doesn't handle errors all that well
@@ -25,9 +26,9 @@ describe "server working", ->
     it "should return some HTML with a 200 status code", (done) ->
       homeHTML = "<b>hello world!</b>"
       
-      solid ->
-        "/"          : -> homeHTML
-        "jquery"     : @jquery
+      server = solid ->
+                "/"          : -> homeHTML
+                "jquery"     : @jquery
             
       get "/", (res, data) ->
         res.statusCode.should.equal 200
@@ -37,6 +38,20 @@ describe "server working", ->
           res.headers['content-type'].should.equal 'text/javascript'
           res.statusCode.should.equal 200
           data.should.equal fs.readFileSync './external-libs/jquery.min.js', 'utf8'
+          
+          server.close()
+          
           done()
+          
+  describe "redirects", ->
+    it "should redirect and return a 302", (done) ->    
+      solid ->
+        "/"          : -> homeHTML
+        "/home"      : "/"
+      
+      get "/home", (res, data) ->
+        res.statusCode.should.equal 302
+        res.headers.location.should.equal "http://#{HOST}:#{PORT}/"
+        done()
   
   describe "server configuration", ->

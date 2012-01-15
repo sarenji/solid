@@ -5,7 +5,9 @@
   "homepage" : "https://github.com/sarenji/solid",
   "description": "Shape super-small, simple, solid sites",
   "dependencies": {
-    "express" : "2.x"
+    "express" : "2.x",
+    "underscore" : "> 1.2.x",
+    "underscore.string" : "> 1.1.x"
   },
   "keywords": [
     "framework",
