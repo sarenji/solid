@@ -2,7 +2,7 @@
 
 [![Build Status](https://secure.travis-ci.org/sarenji/solid.png)](http://travis-ci.org/sarenji/solid)
 
-shape super-small, simple, solid sites.
+make small, simple sites.
 
 ## Installation
 
