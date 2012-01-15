@@ -22,28 +22,28 @@ get = (path, cb, port=PORT) ->
 # Tests
 # =====
 
-describe "server working", ->
-  describe "basic", ->
-    it "should return some HTML with a 200 status code", (done) ->
-      homeHTML = "<b>hello world!</b>"
-      
-      server = solid ->
-                "/"          : -> homeHTML
-                "jquery"     : @jquery
-      
-      console.log "Started server"
-      
-      get "/", (res, data) ->
-        console.log "Got some data #{data}"
-        res.statusCode.should.equal 200
-        data.should.equal homeHTML
-        
-        get "/jquery", (res, data) ->
-          res.headers['content-type'].should.equal 'text/javascript'
-          res.statusCode.should.equal 200
-          data.should.equal fs.readFileSync './external-libs/jquery.min.js', 'utf8'
-          server.close()
-          done()
+describe "server", ->
+  # describe "basic", ->
+  #   it "should return some HTML with a 200 status code", (done) ->
+  #     homeHTML = "<b>hello world!</b>"
+  #     
+  #     server = solid ->
+  #               "/"          : -> homeHTML
+  #               "jquery"     : @jquery
+  #     
+  #     console.log "Started server"
+  #     
+  #     get "/", (res, data) ->
+  #       console.log "Got some data #{data}"
+  #       res.statusCode.should.equal 200
+  #       data.should.equal homeHTML
+  #       
+  #       get "/jquery", (res, data) ->
+  #         res.headers['content-type'].should.equal 'text/javascript'
+  #         res.statusCode.should.equal 200
+  #         data.should.equal fs.readFileSync './external-libs/jquery.min.js', 'utf8'
+  #         server.close()
+  #         done()
           
   describe "redirects", ->
     it "should redirect and return a 302", (done) ->    
