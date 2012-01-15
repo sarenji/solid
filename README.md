@@ -35,6 +35,11 @@ This will run solid's `mocha` tests.
 
 ## TODO
 
+(Ordered roughly in terms of priority)
+
 * Asynchronous request handlers (reading file, etc.)
-* Logging with noise levels (should be low-priority, basic method/path console logging already exists)
+* CSS Reset
+* Other commonly used JS libraries other than jQuery
 * Override the HTTP response header X-Powered-By to Solid from Express :)
+* Logging with noise levels (should be low-priority, basic method/path console logging already exists)
+* Better 404 page (low priority)

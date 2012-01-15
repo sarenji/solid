@@ -1,6 +1,6 @@
 solid = require("../src/solid") 
 
-solid ->
+solid {port: 9001, cwd: __dirname}, ->
   "/"          : -> "<b>hello world!</b>"
   "/home"      : "/"     # URL rewriting/redirects
   "/jquery.js" : @jquery # Remember that you still have to include a <script src="/jquery.js"></script> in your HTML

@@ -6,15 +6,15 @@ should = require 'should'
 
 # Configuration
 
-PORT = 8080
+PORT = solid.DEFAULT_PORT
 HOST = "localhost"
         
 # HTTP client testing helpers
 # TODO: This doesn't handle errors all that well
 
-get = (path, cb) ->
+get = (path, cb, port=PORT) ->
   data = ""
-  http.get {host: 'localhost', port:PORT, path:path}, (res) ->
+  http.get {host: 'localhost', port:port, path:path}, (res) ->
     res.on 'data', (chunk) -> data += chunk
     res.on 'end', -> cb res, data
   
@@ -38,20 +38,29 @@ describe "server working", ->
           res.headers['content-type'].should.equal 'text/javascript'
           res.statusCode.should.equal 200
           data.should.equal fs.readFileSync './external-libs/jquery.min.js', 'utf8'
-          
           server.close()
-          
           done()
           
   describe "redirects", ->
     it "should redirect and return a 302", (done) ->    
-      solid ->
-        "/"          : -> homeHTML
-        "/home"      : "/"
+      server = solid ->
+                "/"          : -> "home"
+                "/home"      : "/"
       
       get "/home", (res, data) ->
         res.statusCode.should.equal 302
         res.headers.location.should.equal "http://#{HOST}:#{PORT}/"
+        server.close()
         done()
   
   describe "server configuration", ->
+    it "should start a server on a port other than the specified port rather than the default one", (done) ->
+      port = 65432
+      server = solid {port: port}, ->
+                  "/" : -> "home"
+      get "/", ((res, data) ->
+          res.statusCode.should.equal 200
+          data.should.equal "home"
+          server.close()
+          done()),
+        port

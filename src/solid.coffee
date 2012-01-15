@@ -3,21 +3,33 @@ express = require 'express'
 _       = require 'underscore'
 _.mixin require('underscore.string')
 
-port = process.env.PORT or 8080
+# Defaults
+# TODO: Shouldn't our default port be 80?
+DEFAULT_PORT = 8080
+
+port = process.env.PORT or DEFAULT_PORT
 
 # Returns the Express server backing Solid
-solid = module.exports = (func) ->
+solid = module.exports = (options, func) ->
+  if not func
+    func = options
+    options = port: port
+  console.log options
+  
   paths = func.call(dsl)
   routes.build paths
-  server = createServer()
-  server.listen port
-  console.log "Solidified port #{port}"
+  server = createServer options
+  server.listen options.port
+  console.log "Solidified port #{options.port}"
   server
 
-createServer = ->
+createServer = (options) ->
   app = express.createServer()
 
-  # app.static "#{__dirname}/public", maxAge : 0
+  if 'cwd' of options
+    staticDir = "#{options.cwd}/static"
+    console.log "Serving static files from #{staticDir}"
+    app.use '/static', express.static(staticDir, maxAge : 0)
 
   # Map routes
   for path, action of routes.cache
@@ -99,3 +111,4 @@ solid.routes =
   map   : routes.map
 
 solid.createServer = createServer
+solid.DEFAULT_PORT = DEFAULT_PORT
