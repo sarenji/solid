@@ -14,7 +14,8 @@ HOST = "localhost"
 
 get = (path, cb, port=PORT) ->
   data = ""
-  http.get {host: 'localhost', port:port, path:path}, (res) ->
+  console.log "About to do a GET #{HOST}:#{port}#{path}"
+  http.get {host: HOST, port:port, path:path}, (res) ->
     res.on 'data', (chunk) -> data += chunk
     res.on 'end', -> cb res, data
   
@@ -29,8 +30,11 @@ describe "server working", ->
       server = solid ->
                 "/"          : -> homeHTML
                 "jquery"     : @jquery
-            
+      
+      console.log "Started server"
+      
       get "/", (res, data) ->
+        console.log "Got some data #{data}"
         res.statusCode.should.equal 200
         data.should.equal homeHTML
         

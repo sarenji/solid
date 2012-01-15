@@ -5,7 +5,7 @@ _.mixin require('underscore.string')
 
 # Defaults
 # TODO: Shouldn't our default port be 80?
-DEFAULT_PORT = 8080
+DEFAULT_PORT = 8081
 
 port = process.env.PORT or DEFAULT_PORT
 
