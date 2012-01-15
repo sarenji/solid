@@ -62,5 +62,5 @@ describe "the dsl", ->
   describe "@jquery", ->
     it "should output the contents of the latest version of jQuery", ->
       # Check against a random of piece of code that's *usually* found in jQuery source code
-      i = dsl.jquery().indexOf "return f.isWindow(a)?a:a.nodeType===9?a."
+      i = dsl.jquery().body.indexOf "return f.isWindow(a)?a:a.nodeType===9?a."
       i.should.above -1

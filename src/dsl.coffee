@@ -33,4 +33,5 @@ dsl.render = (opts, func) ->
 # External library support
 # @jquery will give you the code of the latest jQuery library
 dsl.jquery = () ->
-  return fs.readFileSync './external-libs/jquery.min.js', 'utf8'
+  type: 'text/javascript'
+  body: fs.readFileSync './external-libs/jquery.min.js', 'utf8'

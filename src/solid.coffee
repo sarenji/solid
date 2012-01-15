@@ -22,10 +22,20 @@ createServer = ->
       content = routes.map req.route.path
       if typeof(content) is "function"
         content = content.call dsl, req, res
+        
       console.log "CONTENT: #{content}"
-      if not content then return #TODO: Do something about this?
-      res.writeHead 200, 'Content-Type' : 'text/html'
-      res.end content, 'utf-8'
+      
+      if not content then return #TODO: Do something better than just return? Not sure what Express does with this
+      
+      if typeof content is "object"
+        content.headers ?= {}
+        if "type" of content then content.headers['Content-Type'] = content.type
+        console.log content.headers
+        res.writeHead (content.statusCode or 200), content.headers
+        res.end content.body, 'utf-8'
+      else
+        res.writeHead 200, 'Content-Type' : 'text/html'
+        res.end content, 'utf-8'
 
   # return created server
   app
