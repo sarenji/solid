@@ -1,7 +1,5 @@
 dsl     = require './dsl'
 express = require 'express'
-_       = require 'underscore'
-_.mixin require('underscore.string')
 
 # Defaults
 # TODO: Shouldn't our default port be 80?
@@ -14,7 +12,7 @@ solid = module.exports = (options, func) ->
   if not func
     func = options
     options = port: port
-    
+
   paths = func.call(dsl)
   routes.build paths
   server = createServer options
@@ -35,22 +33,22 @@ createServer = (options) ->
   for path, action of routes.cache
     method = action.method or 'get'
     app[method] path, (req, res, next) ->
-      
+
       # TODO: Also, print the response statusCode (with colors; use termcolor)
       console.log "[#{req.method}] #{req.path}"
-      
+
       content = routes.map req.route.path
-      
-      # If `content` is a function call it with the right scope (the `dsl` object) 
+
+      # If `content` is a function call it with the right scope (the `dsl` object)
       if typeof content is "function"
         content = content.call dsl, req, res
       # If `content` is a string and looks like an URL, then we redirect to that URL
-      else if typeof content is "string" and _(content).startsWith '/'
+      else if typeof content is "string" and content[0] is '/'
         res.redirect content
         return
-        
+
       if not content then return #TODO: Do something better than just return? Not sure what Express does with this
-      
+
       if typeof content is "object"
         content.headers ?= {}
         if "type" of content then content.headers['Content-Type'] = content.type
@@ -100,7 +98,7 @@ routes =
   normalizePath : (path) ->
     path = "/#{path}"
     path = path.replace(/\/{2,}/g, "/") # Repeated forward slashes ('////') translate to one slash ('/')
-    path = path.replace(/(?!^)\/+$/g, "") # 
+    path = path.replace(/(?!^)\/+$/g, "") #
 
   map : (path) ->
     routes.cache[path]
