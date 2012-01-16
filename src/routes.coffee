@@ -9,6 +9,7 @@ route = (app) ->
 makeRoute = (app, path, func) ->
   method = func.method or 'get'
   app[method] path, (req, res, next) ->
+    res.setHeader 'X-Powered-By', 'solid'
     # TODO: Also, print the response statusCode (with colors; use termcolor)
     console.log "[#{req.method}] #{req.path}"
 
