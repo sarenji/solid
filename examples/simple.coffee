@@ -5,7 +5,6 @@ solid {port: 9001, cwd: __dirname}, (app) ->
   app.get "/home", "/"           # URL rewriting/redirects
   app.get "/jquery.js", @jquery  # Put <script src="/jquery.js"></script> in HTML
   app.namespace "/user", ->
-    console.log @
     app.get "/:id", @render (req) ->
       @p "Hi, #{req.params.id}!"
 
