@@ -11,8 +11,8 @@ $ npm install solid
 ## Hello world example:
 
 ```coffeescript
-require('solid') ->
-  @get "/", -> "<b>Hello world!</b>"
+require('solid') (app) ->
+  app.get "/", -> "<b>Hello world!</b>"
 ```
 
 That's it. No, really.
