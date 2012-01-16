@@ -12,7 +12,7 @@ $ npm install solid
 
 ```coffeescript
 require('solid') ->
-  "/" : "<b>Hello world!</b>"
+  @get "/", -> "<b>Hello world!</b>"
 ```
 
 That's it. No, really.
