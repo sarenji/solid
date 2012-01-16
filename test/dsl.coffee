@@ -2,41 +2,6 @@ dsl    = require '../src/dsl'
 should = require 'should'
 
 describe "the dsl", ->
-  func = null
-  beforeEach ->
-    func = ->
-  describe "@get request", ->
-    it "should return a function with the method set to GET", ->
-      dsl.get func
-      func.method.should.equal 'get'
-
-  describe "@post request", ->
-    it "should return a function with the method set to POST", ->
-      dsl.post func
-      func.method.should.equal 'post'
-
-    it "should be aliased to @create", ->
-      dsl.create func
-      func.method.should.equal 'post'
-
-  describe "@put request", ->
-    it "should return a function with the method set to PUT", ->
-      dsl.put func
-      func.method.should.equal 'put'
-
-    it "should be aliased to @update", ->
-      dsl.update func
-      func.method.should.equal 'put'
-
-  describe "@delete request", ->
-    it "should return a function with the method set to DELETE", ->
-      dsl.delete func
-      func.method.should.equal 'delete'
-
-    it "should be aliased to @del", ->
-      dsl.del func
-      func.method.should.equal 'delete'
-
   describe "@render", ->
     it "should create a function that returns html via thermos", ->
       func = dsl.render ->
@@ -58,9 +23,12 @@ describe "the dsl", ->
         @test ->
           @span "you so fancy"
       func.call(null).should.equal "<p><span>you so fancy</span></p>"
-      
+
   describe "@jquery", ->
     it "should output the contents of the latest version of jQuery", ->
       # Check against a random of piece of code that's *usually* found in jQuery source code
       i = dsl.jquery().body.indexOf "return f.isWindow(a)?a:a.nodeType===9?a."
       i.should.above -1
+
+    it "should be served as javascript", ->
+      dsl.jquery().type.should.equal 'text/javascript'

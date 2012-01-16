@@ -1,34 +1,9 @@
 solid  = require '../src/solid'
 fs     = require 'fs'
-http   = require 'http'
 should = require 'should'
 
-
-# Configuration
-
-PORT = solid.DEFAULT_PORT
-HOST = "127.0.0.1"
-
-# HTTP client testing helpers
-
-get = (path, options, callback) ->
-  if not callback
-    callback = options
-    options  = null
-  options ?= { port : PORT }
-
-  data = ""
-  port = options.port
-  console.log "About to do a GET on #{HOST}:#{port}#{path}"
-  request = http.get host: HOST, port: port, path: path, (res) ->
-    res.on 'data', (chunk) -> data += chunk
-    res.on 'end', -> callback res, data
-  request.on 'error', (error) ->
-    console.error "Error in GET request:"
-    console.error error.stack
-
-# Tests
-# =====
+{get} = require './helpers/http'
+{HOST, PORT} = require './helpers/config'
 
 describe "server", ->
   describe "basic", ->
@@ -46,9 +21,9 @@ describe "server", ->
             server.close()
             done()
 
-      server = solid callback: callback, ->
-                "/"          : -> homeHTML
-                "jquery"     : @jquery
+      server = solid callback: callback, (app) ->
+        app.get "/", -> homeHTML
+        app.get "jquery", @jquery
 
   describe "redirects", ->
     it "should redirect and return a 302", (done) ->
@@ -58,9 +33,9 @@ describe "server", ->
           res.headers.location.should.equal "http://#{HOST}:#{PORT}/"
           server.close()
           done()
-      server = solid callback: callback, ->
-                "/"          : -> "home"
-                "/home"      : "/"
+      server = solid callback: callback, (app) ->
+        app.get "/", -> "home"
+        app.get "/home", "/"
 
   describe "static files", ->
     it "should serve all files in the static option as static files", (done) ->
@@ -76,5 +51,31 @@ describe "server", ->
           server.close()
           done()
 
-      server = solid port: port, callback: callback, ->
-                  "/" : -> "home"
+      server = solid port: port, callback: callback, (app) ->
+        app.get "/", -> "home"
+
+  describe "namespaces", ->
+    it "can have nested namespaces", (done) ->
+      callback = ->
+        get "/user/profile/1", (res, data) ->
+          data.should.equal "#1"
+          server.close()
+          done()
+
+      server = solid callback: callback, (app) ->
+        app.namespace "/user", ->
+          app.namespace "/profile", ->
+            app.get "/:id", (req) -> "##{req.params.id}"
+
+    it "uses the DSL within a namespace", (done) ->
+      callback = ->
+        get "/javascripts/jquery.js", (res, data) ->
+          res.headers['content-type'].should.equal 'text/javascript'
+          res.statusCode.should.equal 200
+          data.should.equal fs.readFileSync './external-libs/jquery.min.js', 'utf8'
+          server.close()
+          done()
+
+      server = solid callback: callback, (app) ->
+        app.namespace "/javascripts", ->
+          app.get '/jquery.js', @jquery

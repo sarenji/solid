@@ -17,7 +17,7 @@ require('solid') ->
 
 That's it. No, really.
 
-A bit more contrived example can be found [here](https://github.com/sarenji/solid/blob/master/examples/hello_world.coffee), where you can see everything you can do in solid currently.
+A bit more contrived example can be found [here](https://github.com/sarenji/solid/blob/master/examples/simple.coffee), where you can see some of what you can do in solid currently.
 
 ## Running tests
 

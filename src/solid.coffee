@@ -1,8 +1,8 @@
 dsl     = require './dsl'
+{Router} = require('./routes')
 express = require 'express'
 
 # Defaults
-# TODO: Shouldn't our default port be 80?
 DEFAULT_PORT = 8081
 
 port = process.env.PORT or DEFAULT_PORT
@@ -11,14 +11,20 @@ port = process.env.PORT or DEFAULT_PORT
 solid = module.exports = (options, func) ->
   if not func
     func = options
-    options = null
+    options = {}
   options.port ?= port
 
-  paths = func.call(dsl)
-  solid.routes.build paths
+  # Create the server and pass in options
   server = createServer options
+
+  # Map routes; use DSL as the context
+  func.call(dsl, new Router(server))
+
+  # Start listening for connections
   server.listen options.port, options.host, options.callback
   console.log "Solidified port #{options.port}"
+
+  # Return this server instance
   server
 
 createServer = (options) ->
@@ -29,9 +35,6 @@ createServer = (options) ->
     console.log "Serving static files from #{staticDir}"
     # TODO: In prod, it's bad to have a maxAge of zero
     app.use '/static', express.static(staticDir, maxAge : 0)
-
-  # Map routes
-  solid.routes.route app
 
   # return created server
   app
