@@ -13,7 +13,6 @@ http = require 'http'
 
   data = ""
   port = options.port
-  console.log "About to do a GET on #{HOST}:#{port}#{path}"
   request = http.get host: HOST, port: port, path: path, (res) ->
     res.on 'data', (chunk) -> data += chunk
     res.on 'end', -> callback res, data
