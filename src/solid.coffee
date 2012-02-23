@@ -40,6 +40,5 @@ createServer = (options) ->
   app
 
 solid.routes = require './routes'
-
 solid.createServer = createServer
 solid.DEFAULT_PORT = DEFAULT_PORT

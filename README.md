@@ -19,6 +19,10 @@ That's it. No, really.
 
 A bit more contrived example can be found [here](https://github.com/sarenji/solid/blob/master/examples/simple.coffee), where you can see some of what you can do in solid currently.
 
+## App
+
+The `app` variable passed to your function is NOT an instance of Express. app.app should give you the instance of Express should you want to modify something in Express directly.
+
 ## Running tests
 
 ```bash
