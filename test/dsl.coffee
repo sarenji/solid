@@ -37,6 +37,10 @@ describe "the dsl", ->
     it "renders a file and outputs HTML", ->
       dsl.haml('example', views: 'test/fixtures').should.equal '<!DOCTYPE html>\n<html><head><title>Fixture</title></head><body><p>Hello world!</p></body></html>'
 
+  describe "@jade", ->
+    it "renders a file and outputs HTML", ->
+      dsl.jade('example', views: 'test/fixtures').should.equal '<!DOCTYPE html><html><head><title>Fixture</title></head><body><p>Hello world!</p></body></html>'
+
   describe "@sass", ->
     it "renders a file and outputs CSS", ->
       dsl.sass('example', views: 'test/fixtures').should.equal '#header p {\n  color: red;}\n'

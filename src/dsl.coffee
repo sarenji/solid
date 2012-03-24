@@ -22,17 +22,14 @@ dsl.jquery = () ->
   type: 'text/javascript'
   body: fs.readFileSync "#{__dirname}/../external-libs/jquery.min.js", 'utf8'
 
-# stylus plugin
-# dsl.stylus = (filePath) ->
-#   filePath = normalize(filePath, 'styl')
-#   includes.stylus ?= require('stylus')
-#   includes.nib    ?= require('nib')
-#   file = readFile(filePath)
-#   includes.stylus(file).import(includes.nib.path)
-
 # haml plugin
 dsl.haml = (template, options = {}, locals = {}) ->
   render 'haml', template, options, locals
+
+# jade plugin
+dsl.jade = (template, options = {}, locals = {}) ->
+  options.method ||= 'compile'
+  render 'jade', template, options, locals
 
 # sass plugin
 dsl.sass = (template, options = {}, locals = {}) ->
