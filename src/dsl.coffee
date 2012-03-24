@@ -22,25 +22,44 @@ dsl.jquery = () ->
   type: 'text/javascript'
   body: fs.readFileSync "#{__dirname}/../external-libs/jquery.min.js", 'utf8'
 
+# stylus plugin
+# dsl.stylus = (filePath) ->
+#   filePath = normalize(filePath, 'styl')
+#   includes.stylus ?= require('stylus')
+#   includes.nib    ?= require('nib')
+#   file = readFile(filePath)
+#   includes.stylus(file).import(includes.nib.path)
+
 # haml plugin
 dsl.haml = (template, options = {}, locals = {}) ->
   render 'haml', template, options, locals
+
+# sass plugin
+dsl.sass = (template, options = {}, locals = {}) ->
+  options.method ||= 'render'
+  render 'sass', template, options
 
 # Abstract common render use.
 render = (engine, template, options, locals) ->
   extension = options.extension || engine
   views = options.views || 'views'
+  method = options.method
   template = normalize(template, extension)
 
   # Memoize the compiled template
   # TODO: Not scalable
   if template not of compiled
     includes[engine] ?= require(engine)
-    file = readFile(template, views)
-    compiled[template] = includes[engine](file)
+    contents = readFile(template, views)
+    renderer = if method? then includes[engine][method] else includes[engine]
+    compiled[template] = renderer(contents)
 
-  # Run the compiled template with passed locals
-  compiled[template](locals)
+  if locals?
+    # Run the compiled template with passed locals
+    compiled[template](locals)
+  else
+    # Just return the compiled template
+    compiled[template]
 
 normalize = (url, extension) ->
   urlExtension = url.split('.').pop()
