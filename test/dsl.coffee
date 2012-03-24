@@ -32,3 +32,7 @@ describe "the dsl", ->
 
     it "should be served as javascript", ->
       dsl.jquery().type.should.equal 'text/javascript'
+
+  describe "@haml", ->
+    it "renders a file and outputs HTML", ->
+      dsl.haml('example', views: 'test/fixtures').should.equal '<!DOCTYPE html>\n<html><head><title>Fixture</title></head><body><p>Hello world!</p></body></html>'

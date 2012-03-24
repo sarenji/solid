@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "coffee-script": "1.1.x",
+    "haml" : "*",
     "should": "0.3.x",
     "mocha": "0.3.x"
   },
