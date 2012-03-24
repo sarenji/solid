@@ -23,7 +23,7 @@
     "jade" : "*",
     "sass" : "*",
     "should": "0.3.x",
-    "mocha": "0.3.x"
+    "mocha": "1.0.x"
   },
   "scripts": {
     "test": "mocha",
