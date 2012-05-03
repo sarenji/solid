@@ -78,3 +78,16 @@ describe "server", ->
       server = solid callback: callback, (app) ->
         app.namespace "/javascripts", ->
           app.get '/jquery.js', @jquery
+
+  describe "parameterized routes", ->
+    it "doesn't return the same content", (done) ->
+      callback = ->
+        get "/1", (res, data) ->
+          data.should.equal "#1"
+          get "/2", (res, data) ->
+            data.should.equal "#2"
+            server.close()
+            done()
+
+      server = solid callback: callback, (app) ->
+        app.get '/:id', (req) -> "##{req.params.id}"
