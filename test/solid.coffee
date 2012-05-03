@@ -1,6 +1,5 @@
 solid  = require '../src/solid'
 fs     = require 'fs'
-should = require 'should'
 
 {get} = require './helpers/http'
 {HOST, PORT} = require './helpers/config'

@@ -1,5 +1,4 @@
 dsl    = require '../src/dsl'
-should = require 'should'
 
 describe "the dsl", ->
   describe "@render", ->
