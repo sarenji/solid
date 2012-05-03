@@ -27,8 +27,7 @@
   },
   "scripts": {
     "test": "mocha",
-    "prepublish": "git stash && coffee -o lib -c src/*.coffee",
-    "postpublish": "git stash pop"
+    "prepublish": "coffee -o lib -c src/*.coffee"
   },
   "contributors": [
     "Abi Raja <abii@stanford.edu>"
