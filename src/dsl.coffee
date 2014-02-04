@@ -36,11 +36,30 @@ dsl.sass = (template, options = {}, locals = {}) ->
   options.method ||= 'render'
   render 'sass', template, options
 
+# stylus plugin
+# TODO: cleanup
+dsl.stylus = (template, options = {}, locals = {}) ->
+  options.extension ||= 'styl'
+  options.method ||= 'render'
+  outerCSS = null
+  options.methodArgs = [
+    (err, css) ->
+      if err then throw err
+      outerCSS = css
+  ]
+  render 'stylus', template, options
+  compiled[currentTemplate] ?= outerCSS
+
+# Alias for @stylus
+dsl.styl = dsl.stylus
+
 # Abstract common render use.
+currentTemplate = null
 render = (engine, template, options, locals) ->
   extension = options.extension || engine
   views = options.views || 'views'
   method = options.method
+  methodArgs = options.methodArgs || []
   template = normalize(template, extension)
 
   # Memoize the compiled template
@@ -49,7 +68,8 @@ render = (engine, template, options, locals) ->
     includes[engine] ?= require(engine)
     contents = readFile(template, views)
     renderer = if method? then includes[engine][method] else includes[engine]
-    compiled[template] = renderer(contents)
+    currentTemplate = template
+    compiled[template] = renderer(contents, methodArgs...)
 
   if locals?
     # Run the compiled template with passed locals

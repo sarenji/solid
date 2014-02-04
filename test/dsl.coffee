@@ -43,3 +43,8 @@ describe "the dsl", ->
   describe "@sass", ->
     it "renders a file and outputs CSS", ->
       dsl.sass('example', views: 'test/fixtures').should.equal '#header p {\n  color: red;}\n'
+
+  describe "@stylus and @styl", ->
+    it "renders a file and outputs CSS", ->
+      dsl.stylus('example', views: 'test/fixtures').should.equal '#header p {\n  color: #f00;\n}\n'
+      dsl.styl('example', views: 'test/fixtures').should.equal '#header p {\n  color: #f00;\n}\n'
